@@ -1,0 +1,8 @@
+github.com/
+web/go_web/node_modules
+bin/
+cmd/main.go~
+pkg/sumdb
+..gitignore.un~
+.gitignore.swp
+.gitignore~
