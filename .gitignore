@@ -6,3 +6,12 @@ pkg/sumdb
 ..gitignore.un~
 .gitignore.swp
 .gitignore~
+cmd/go_server/.main.go.un~
+cmd/go_server/main.go~
+pkg/go_server/.server.go.un~
+pkg/go_server/server.go~
+.DS_Store
+cmd/.DS_Store
+pkg/.DS_Store
+go.etcd.io/
+web/.DS_Store
