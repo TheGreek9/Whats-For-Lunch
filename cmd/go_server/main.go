@@ -15,11 +15,12 @@ import (
 )
 
 var (
-	allowedOrigins = handlers.AllowedOrigins([]string{"*"})
-	allowedHeaders = handlers.AllowedHeaders([]string{"Accept", "DNT", "Content-Type", "Referer", "User Agent", "Sec-Fetch-Dest"})
+	allowedOrigins     = handlers.AllowedOrigins([]string{"*"})
+	allowedHeaders     = handlers.AllowedHeaders([]string{"Accept", "DNT", "Content-Type", "Referer", "User Agent", "Sec-Fetch-Dest"})
 	allowedCredentials = handlers.AllowCredentials()
-	allowedMethods = handlers.AllowedMethods([]string{"GET", "POST", "OPTIONS"})
+	allowedMethods     = handlers.AllowedMethods([]string{"GET", "POST", "OPTIONS"})
 )
+
 // spaHandler implements the http.Handler interface, so we can use it
 // to respond to HTTP requests. The path to the static directory and
 // path to the index file within that static directory are used to
@@ -76,21 +77,27 @@ func main() {
 		log.Fatal(err)
 	}
 	router.HandleFunc("/v1/group/query/{groupId}", func(w http.ResponseWriter, r *http.Request) {
-		b, err := rh.GroupQueryHandler(w, r)
+		b, err := rh.HandlerQueryDb(w, r, "groupId", server.BktGroup)
 		if err != nil {
-			log.Printf("GroupQueryHandler error %v", err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 		w.Write(b)
 	})
 
 	router.HandleFunc("/v1/group/create", func(w http.ResponseWriter, r *http.Request) {
-		err := rh.GroupCreateHandler(w, r)
+		ID, err := rh.HandlerCreateGroup(w, r)
 		if err != nil {
-			log.Printf("GroupCreateHandler erro %v", err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
-	})
+		w.Write(ID)
+	}).Methods("POST")
+
+	router.HandleFunc("/v1/group/delete", func(w http.ResponseWriter, r *http.Request) {
+		if err := rh.HandlerDeleteDb(w, r, "groupId", server.BktGroup); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		w.WriteHeader(http.StatusOK)
+	}).Methods("POST")
 
 	spa := spaHandler{staticPath: "/Users/Spyro/Developer/go/src/web/go_web/public", indexPath: "index.html"}
 	router.PathPrefix("/").Handler(spa)
