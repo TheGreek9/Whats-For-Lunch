@@ -1,5 +1,6 @@
 github.com/
 web/go_web/node_modules
+web/wfl_web/node_modules
 bin/
 cmd/main.go~
 pkg/sumdb
