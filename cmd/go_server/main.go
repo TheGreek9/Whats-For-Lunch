@@ -99,7 +99,7 @@ func main() {
 		w.WriteHeader(http.StatusOK)
 	}).Methods("POST")
 
-	spa := spaHandler{staticPath: "/Users/Spyro/Developer/go/src/web/go_web/public", indexPath: "index.html"}
+	spa := spaHandler{staticPath: "/Users/Spyro/Developer/go/src/web/wfl_web/public", indexPath: "index.html"}
 	router.PathPrefix("/").Handler(spa)
 
 	srv := &http.Server{
